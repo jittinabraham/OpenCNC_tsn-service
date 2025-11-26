@@ -1,1 +1,39 @@
+name: Build and push Docker images
 
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  # you can change this to a short SHA in the run steps if you want
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} \
+            -u "${{ github.actor }}" --password-stdin
+      - name: Build & push tsn-service image
+        run: |
+          SERVICE_NAME="tsn-service"
+          SERVICE_DIR="opencnc_tsn-service"
+          IMAGE="${{ env.REGISTRY }}/${{ github.repository }}/$SERVICE_NAME:${{ env.IMAGE_TAG }}"
+
+          echo "Building Docker image $IMAGE from $SERVICE_DIR"
+          docker build -t "$IMAGE" "$SERVICE_DIR"
+
+          echo "Pushing image $IMAGE"
+          docker push "$IMAGE"
