@@ -38,7 +38,7 @@ jobs:
           IMAGE="ghcr.io/${REPO_LC}/${SERVICE_NAME}:${IMAGE_TAG}"
       
           echo "Building Docker image $IMAGE from $SERVICE_DIR"
-          docker build -t "$IMAGE" 
+          docker build -t "$IMAGE" . 
       
           echo "Pushing image $IMAGE"
           docker push "$IMAGE"
