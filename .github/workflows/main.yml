@@ -29,7 +29,7 @@ jobs:
       - name: Build & push tsn-service image
         run: |
           SERVICE_NAME="tsn-service"
-          SERVICE_DIR="opencnc_tsn-service"
+        
           IMAGE_TAG=${GITHUB_SHA::8}
       
           # Lowercase the GitHub repository (e.g. OpenCNC_tsn-service -> opencnc_tsn-service)
@@ -38,7 +38,7 @@ jobs:
           IMAGE="ghcr.io/${REPO_LC}/${SERVICE_NAME}:${IMAGE_TAG}"
       
           echo "Building Docker image $IMAGE from $SERVICE_DIR"
-          docker build -t "$IMAGE" "$SERVICE_DIR"
+          docker build -t "$IMAGE" 
       
           echo "Pushing image $IMAGE"
           docker push "$IMAGE"
